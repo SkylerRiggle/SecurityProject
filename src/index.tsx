@@ -4,6 +4,7 @@ import reportWebVitals from './reportWebVitals';
 import AppRouter from './AppRouter';
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/globals.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
