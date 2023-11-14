@@ -7,7 +7,8 @@ enum Status
 {
     NOT_CONNECTED = 0,
     CONNECTED = 1,
-    CONNECTING = 2
+    CONNECTING = 2,
+    REFUSED = 3
 }
 
 const RfidPage = () =>
@@ -20,7 +21,7 @@ const RfidPage = () =>
 
     useEffect(() => {
         if (status !== Status.CONNECTED) { return; }
-        
+
         const socket = io("http://localhost:3333");
         socket.on("serialdata", (data) => {
             console.log(data);
@@ -34,11 +35,11 @@ const RfidPage = () =>
 
     const attemptConnection = () =>
     {
-        if (status !== Status.NOT_CONNECTED) { return; }
+        if (status === Status.CONNECTING) { return; }
         setStatus(Status.CONNECTING);
         axios.get("http://localhost:3333/connect").then((response) => {
             setStatus(response.status === 200 ? (
-                response.data.status ? Status.CONNECTED : Status.NOT_CONNECTED
+                response.data.status ? Status.CONNECTED : Status.REFUSED
             ) : Status.NOT_CONNECTED);
         });
     }
@@ -71,7 +72,10 @@ const RfidPage = () =>
                                 <h5 className="m-0">Connecting...</h5>
                             </div>;
                         default: // Also Include NOT CONNECTED Case
-                            return <div className="d-flex justify-content-center align-items-center">
+                            return <div className="d-flex flex-column justify-content-center align-items-center">
+                                {status === Status.REFUSED &&
+                                    <span className="fst-italic text-danger">Connection Refused. Please Try Again...</span>
+                                }
                                 <Button
                                     className="p-2 btn"
                                     onClick={attemptConnection}
