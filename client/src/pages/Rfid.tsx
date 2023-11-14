@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
+import io from 'socket.io-client';
 
 enum Status
 {
@@ -13,16 +15,28 @@ const RfidPage = () =>
     const [status, setStatus] = useState<Status>(Status.NOT_CONNECTED);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-    const HANDSHAKE = 'A';
-    const ACCEPT = 'B';
-
     const targetKey = "8A3A4580";
     const [key, setKey] = useState<string>("N/A")
 
-    const attemptConnection = async () =>
+    useEffect(() => {
+        const socket = io("http://localhost:3333");
+        socket.on("serialdata", (data) => {
+            console.log(data);
+            setIsAuthenticated(true);
+        });
+
+        return () => {
+            socket.close();
+        }
+    }, []);
+
+    const attemptConnection = () =>
     {
         if (status !== Status.NOT_CONNECTED) { return; }
         setStatus(Status.CONNECTING);
+        axios.get("http://localhost:3333/connect").then((response) => {
+            setStatus(response.status === 200 ? response.data.status : Status.NOT_CONNECTED);
+        });
     }
 
     return (
