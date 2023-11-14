@@ -2,10 +2,6 @@ import { ReadlineParser, SerialPort } from "serialport";
 import { Server } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
-// parser.on('data', function (data) {
-//     io.emit('serialdata', { data: data });
-// });
-
 const HANDSHAKE = 'A';
 const ACCEPT = 'B';
 
