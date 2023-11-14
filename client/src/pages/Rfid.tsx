@@ -24,8 +24,9 @@ const RfidPage = () =>
 
         const socket = io("http://localhost:3333");
         socket.on("serialdata", (data) => {
-            console.log(data);
-            setIsAuthenticated(true);
+            const newKey = (data?.key ?? "N/A").trim();
+            setKey(newKey);
+            setIsAuthenticated(newKey === targetKey);
         });
 
         return () => {
