@@ -1,4 +1,4 @@
-import { ReadlineParser, SerialPort } from "serialport";
+import { SerialPort } from "serialport";
 import { Server } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
