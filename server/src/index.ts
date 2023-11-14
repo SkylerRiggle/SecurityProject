@@ -1,21 +1,21 @@
 import express from 'express';
 import { Server } from "socket.io";
-import http from "http";
 import cors from "cors";
 
 /* Initialize a New Express Application */
 const app = express();
 app.use(cors());
 
-const server = new http.Server(app);
-const io = new Server(server);
-const port = process.env.PORT || 3333;
-
 /* Signal Application is Running On Localhost */
-app.listen(port, () => {
+const port = process.env.PORT || 3333;
+const server = app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
+/* Setup Socket */
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
 io.on("connection", (socket) => {
   console.log("Socket Connected");
 });
