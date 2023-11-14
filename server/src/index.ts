@@ -1,6 +1,7 @@
 import express from 'express';
 import { Server } from "socket.io";
 import cors from "cors";
+import connect from './rfid';
 
 /* Initialize a New Express Application */
 const app = express();
@@ -22,5 +23,6 @@ io.on("connection", (socket) => {
 
 /* Register Application Routes */
 app.get("/connect", async (_req, res) => {
-  res.send({ status: true });
-})
+  const status = await connect(io);
+  res.send({ status: status });
+});
