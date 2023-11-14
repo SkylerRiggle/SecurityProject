@@ -19,6 +19,8 @@ const RfidPage = () =>
     const [key, setKey] = useState<string>("N/A")
 
     useEffect(() => {
+        if (status !== Status.CONNECTED) { return; }
+        
         const socket = io("http://localhost:3333");
         socket.on("serialdata", (data) => {
             console.log(data);
@@ -28,14 +30,16 @@ const RfidPage = () =>
         return () => {
             socket.close();
         }
-    }, []);
+    }, [status]);
 
     const attemptConnection = () =>
     {
         if (status !== Status.NOT_CONNECTED) { return; }
         setStatus(Status.CONNECTING);
         axios.get("http://localhost:3333/connect").then((response) => {
-            setStatus(response.status === 200 ? response.data.status : Status.NOT_CONNECTED);
+            setStatus(response.status === 200 ? (
+                response.data.status ? Status.CONNECTED : Status.NOT_CONNECTED
+            ) : Status.NOT_CONNECTED);
         });
     }
 
