@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 
 const SignaturePage = () =>
@@ -20,7 +20,7 @@ const SignaturePage = () =>
         <h5 className="mt-4">System Message: {message}</h5>
         <div className="mt-4 bg-secondary p-3 rounded border border-dark">
             <Button className="me-2" onClick={() => {
-
+                console.log(canvas.current?.exportPaths())
             }}>
                 Submit
             </Button>

@@ -3,8 +3,9 @@ import HomePage from "./pages/Home";
 import StandardPage from "./pages/Standard";
 import RfidPage from "./pages/Rfid";
 import SignaturePage from "./pages/Signature";
+import { Button } from "react-bootstrap";
 
-const AppRouter = () => (
+const AppRouter = () => (<>
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<HomePage />} />
@@ -13,6 +14,10 @@ const AppRouter = () => (
             <Route path="/signature" element={<SignaturePage />} />
         </Routes>
     </BrowserRouter>
-);
+
+    <a href="/" className="text-white btn btn-cancel position-absolute top-0 m-2">
+        Back
+    </a>
+</>);
 
 export default AppRouter;
