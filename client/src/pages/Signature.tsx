@@ -3,8 +3,10 @@ import Button from "react-bootstrap/Button";
 import { Point, ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 
 const TOLERANCE = 0.05;
-const AUTH_TOLERANCE = 10;
+
+const AUTH_TOLERANCE = 2;
 const AUTH_MATCH = 0.8;
+const PADDING = 2;
 
 const SignaturePage = () =>
 {
@@ -53,21 +55,42 @@ const SignaturePage = () =>
         return slopes;
     }
 
+    const updateSignature = (slopeSegments: number[]) =>
+    {
+        setSignature(slopeSegments);
+        setMessage("Ready for Authentication!");
+    }
+
+    const checkAuthentication = (slopeSegments: number[]): boolean =>
+    {
+        let match = 0;
+        for (let idx = 0; idx < slopeSegments.length; idx++)
+        {
+            const val = slopeSegments[idx];
+            const end = Math.min(signature.length, idx + PADDING);
+            for (let jdx = Math.max(
+                0, idx - PADDING
+            ); jdx < end; jdx++)
+            {
+                const diff = Math.abs(val - signature[jdx]);
+                if (diff <= AUTH_TOLERANCE || !diff)
+                {
+                    match++;
+                    break;
+                }
+            }
+        }
+        return (match / slopeSegments.length) >= AUTH_MATCH;
+    }
+
     const handleState = (slopeSegments: number[]) =>
     {
         if (slopeSegments.length === 0) { return; }
-        if (signature.length === 0)
-        {
-            setSignature(slopeSegments);
-            setMessage("Ready for Authentication!");
-            return;
-        }
-
-        let match = 0;
-
-        // TODO Do Authentication Work
-
-        setMessage((match >= AUTH_MATCH) ? "Authenticated!" : "Not Authenticated...");
+        if (signature.length === 0) { return updateSignature(slopeSegments); }
+        setMessage(checkAuthentication(slopeSegments)
+            ? "Authenticated!"
+            : "Not Authenticated..."
+        );
     }
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
