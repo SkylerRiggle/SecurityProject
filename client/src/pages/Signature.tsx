@@ -27,6 +27,7 @@ const SignaturePage = () =>
 
             <Button className="ms-2 btn-cancel" onClick={() => {
                 canvas.current?.clearCanvas();
+                setMessage("Canvas Cleared");
             }}>
                 Clear
             </Button>
