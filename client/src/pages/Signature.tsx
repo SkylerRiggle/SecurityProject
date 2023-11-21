@@ -51,13 +51,17 @@ const SignaturePage = () =>
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
         <h3 className="mb-4">Sign Here!</h3>
-        <div className="w-50 border border-dark" style={{height: "50vh"}}>
+        <div className="border border-dark" style={{width: "600px", height: "400px"}}>
             <ReactSketchCanvas
                 strokeWidth={4}
                 strokeColor="#FF0000"
                 ref={canvas}
                 className={`${loading && "d-none"}`}
             />
+            {loading && <div className="d-flex justify-content-center align-items-center">
+                <div className="spinner-border text-light me-3" />
+                <h5 className="m-0">Loading...</h5>
+            </div>}
         </div>
 
         <h5 className="mt-4">System Message: {message}</h5>
