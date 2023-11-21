@@ -79,3 +79,17 @@ a {
   box-shadow: 0 2px 0 0 #12243c;
   transform: translateY(3px);
 }
+
+.btn-cancel {
+  background-color: #ad2929;
+  border-color: #631515;
+  box-shadow: 0 5px 0 0 #631515;
+  transition: 0.25s;
+}
+
+.btn-cancel:hover {
+  background-color: #df3939;
+  border: 2px solid #631515;
+  box-shadow: 0 2px 0 0 #631515;
+  transform: translateY(3px);
+}
