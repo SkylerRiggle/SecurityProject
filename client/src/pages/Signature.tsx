@@ -3,13 +3,17 @@ import Button from "react-bootstrap/Button";
 import { Point, ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 
 const TOLERANCE = 0.05;
+const AUTH_TOLERANCE = 10;
+const AUTH_MATCH = 0.8;
 
 const SignaturePage = () =>
 {
     const canvas = useRef<ReactSketchCanvasRef | null>(null);
 
-    const [message, setMessage] = useState<string>("N/A");
+    const [message, setMessage] = useState<string>("Waiting for First Signature...");
     const [loading, setLoading] = useState<boolean>(false);
+
+    const [signature, setSignature] = useState<number[]>([]);
 
     const reducePoints = (points: Point[]): number[] => 
     {
@@ -49,6 +53,23 @@ const SignaturePage = () =>
         return slopes;
     }
 
+    const handleState = (slopeSegments: number[]) =>
+    {
+        if (slopeSegments.length === 0) { return; }
+        if (signature.length === 0)
+        {
+            setSignature(slopeSegments);
+            setMessage("Ready for Authentication!");
+            return;
+        }
+
+        let match = 0;
+
+        // TODO Do Authentication Work
+
+        setMessage((match >= AUTH_MATCH) ? "Authenticated!" : "Not Authenticated...");
+    }
+
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
         <h3 className="mb-4">Sign Here!</h3>
         <div className="border border-dark" style={{width: "600px", height: "400px"}}>
@@ -77,6 +98,8 @@ const SignaturePage = () =>
                 {
                     pointCollection.push(reducePoints(path.paths));
                 }
+
+                handleState(pointCollection.flat());
 
                 cur.clearCanvas();
                 setLoading(false);
