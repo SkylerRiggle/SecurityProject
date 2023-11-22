@@ -57,12 +57,14 @@ const SignaturePage = () =>
 
     const updateSignature = (slopeSegments: number[]) =>
     {
+        // console.log(`ORIGINAL: ${slopeSegments}`);
         setSignature(slopeSegments);
         setMessage("Ready for Authentication!");
     }
 
     const checkAuthentication = (slopeSegments: number[]): boolean =>
     {
+        // console.log(`SIGNATURE: ${slopeSegments}`);
         let match = 0;
         for (let idx = 0; idx < slopeSegments.length; idx++)
         {
@@ -80,6 +82,7 @@ const SignaturePage = () =>
                 }
             }
         }
+        // console.log(match / slopeSegments.length);
         return (match / slopeSegments.length) >= AUTH_MATCH;
     }
 
