@@ -4,9 +4,9 @@ import { Point, ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-can
 
 const TOLERANCE = 0.05;
 
-const AUTH_TOLERANCE = 2;
-const AUTH_MATCH = 0.8;
-const PADDING = 2;
+const AUTH_TOLERANCE = 2.5;
+const AUTH_MATCH = 0.75;
+const LEFTOVERS = 15;
 
 const SignaturePage = () =>
 {
@@ -57,33 +57,37 @@ const SignaturePage = () =>
 
     const updateSignature = (slopeSegments: number[]) =>
     {
-        // console.log(`ORIGINAL: ${slopeSegments}`);
         setSignature(slopeSegments);
         setMessage("Ready for Authentication!");
     }
 
-    const checkAuthentication = (slopeSegments: number[]): boolean =>
+    const getCheckScore = (small: number[], large: number[]): [number, number] =>
     {
-        // console.log(`SIGNATURE: ${slopeSegments}`);
-        let match = 0;
-        for (let idx = 0; idx < slopeSegments.length; idx++)
+        let match = 0, jdx = 0;
+        for (let idx = 0; idx < small.length; idx++)
         {
-            const val = slopeSegments[idx];
-            const end = Math.min(signature.length, idx + PADDING);
-            for (let jdx = Math.max(
-                0, idx - PADDING
-            ); jdx < end; jdx++)
+            const val = small[idx];
+            for (; jdx < large.length; jdx++)
             {
-                const diff = Math.abs(val - signature[jdx]);
+                const diff = Math.abs(val - large[jdx]);
                 if (diff <= AUTH_TOLERANCE || !diff)
                 {
                     match++;
+                    jdx++;
                     break;
                 }
             }
         }
-        // console.log(match / slopeSegments.length);
-        return (match / slopeSegments.length) >= AUTH_MATCH;
+        return [match / small.length, large.length - jdx];
+    }
+
+    const checkAuthentication = (slopeSegments: number[]): boolean =>
+    {
+        const results = slopeSegments.length > signature.length
+        ? getCheckScore(signature, slopeSegments)
+        : getCheckScore(slopeSegments, signature);
+        console.log(`RESULTS: ${results}`);
+        return (results[0] >= AUTH_MATCH) && (results[1] <= LEFTOVERS);
     }
 
     const handleState = (slopeSegments: number[]) =>
