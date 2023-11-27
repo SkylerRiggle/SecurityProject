@@ -1,104 +1,20 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
-import { Point, ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
-
-const TOLERANCE = 0.05;
-
-const AUTH_TOLERANCE = 2.5;
-const AUTH_MATCH = 0.75;
-const LEFTOVERS = 15;
+import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
+import SigAuth from "../auth/SigAuth";
 
 const SignaturePage = () =>
 {
-    const canvas = useRef<ReactSketchCanvasRef | null>(null);
+    const numPasswords = 3;
+    const [inputPasswords, setInputPasswords] = useState<number>(0);
 
-    const [message, setMessage] = useState<string>("Waiting for First Signature...");
+    const canvas = useRef<ReactSketchCanvasRef | null>(null);
+    const [auth, setAuth] = useState<SigAuth>();
+
+    const [message, setMessage] = useState<string>(`Input ${numPasswords} of the Same Signature`);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [signature, setSignature] = useState<number[]>([]);
-
-    const reducePoints = (points: Point[]): number[] => 
-    {
-        const slopes: number[] = [];
-
-        let idx = 0;
-        while (idx < points.length - 1)
-        {
-            const p1 = points[idx];
-            const p2 = points[idx + 1];
-
-            const difX = p2.x - p1.x;
-            const difY = p2.y - p1.y;
-
-            if (!(difX || difY))
-            {
-                points.splice(idx + 1, 1);
-                continue;
-            }
-
-            slopes.push(difX ? difY / difX : Infinity);
-            idx++;
-        }
-
-        idx = 0;
-        while (idx < slopes.length - 1)
-        {
-            const diff = Math.abs(slopes[idx] - slopes[idx + 1]);
-            if (diff <= TOLERANCE || !diff)
-            {
-                slopes.splice(idx + 1, 1);
-                continue;
-            }
-            idx++;
-        }
-
-        return slopes;
-    }
-
-    const updateSignature = (slopeSegments: number[]) =>
-    {
-        setSignature(slopeSegments);
-        setMessage("Ready for Authentication!");
-    }
-
-    const getCheckScore = (small: number[], large: number[]): [number, number] =>
-    {
-        let match = 0, jdx = 0;
-        for (let idx = 0; idx < small.length; idx++)
-        {
-            const val = small[idx];
-            for (; jdx < large.length; jdx++)
-            {
-                const diff = Math.abs(val - large[jdx]);
-                if (diff <= AUTH_TOLERANCE || !diff)
-                {
-                    match++;
-                    jdx++;
-                    break;
-                }
-            }
-        }
-        return [match / small.length, large.length - jdx];
-    }
-
-    const checkAuthentication = (slopeSegments: number[]): boolean =>
-    {
-        const results = slopeSegments.length > signature.length
-        ? getCheckScore(signature, slopeSegments)
-        : getCheckScore(slopeSegments, signature);
-        console.log(`RESULTS: ${results}`);
-        return (results[0] >= AUTH_MATCH) && (results[1] <= LEFTOVERS);
-    }
-
-    const handleState = (slopeSegments: number[]) =>
-    {
-        if (slopeSegments.length === 0) { return; }
-        if (signature.length === 0) { return updateSignature(slopeSegments); }
-        setMessage(checkAuthentication(slopeSegments)
-            ? "Authenticated!"
-            : "Not Authenticated..."
-        );
-    }
+    useEffect(() => { setAuth(new SigAuth(0.0872665, 0.1, 0.75)); }, []);
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
         <h3 className="mb-4">Sign Here!</h3>
@@ -119,19 +35,49 @@ const SignaturePage = () =>
         <div className="mt-4 bg-secondary p-3 rounded border border-dark">
             <Button className="me-2" onClick={async () => {
                 const cur = canvas.current;
-                if (!cur) { return; }
+                if (!cur || !auth || loading) { return; }
                 setLoading(true);
 
-                const pointCollection = [];
+                // Flat map each of the points in the sections
+                const points = [];
                 const paths = await cur.exportPaths();
-                for (const path of paths)
+                for (let idx = 0; idx < paths.length; idx++)
                 {
-                    pointCollection.push(reducePoints(path.paths));
+                    const section = paths[idx].paths;
+                    for (let jdx = 0; jdx < section.length; jdx++)
+                    {
+                        points.push(section[jdx]);
+                    }
                 }
 
-                handleState(pointCollection.flat());
-
                 cur.clearCanvas();
+
+                if (inputPasswords >= numPasswords)
+                {
+                    setMessage(auth.CheckAuth(points)
+                        ? "Authenticated"
+                        : "Failed to Authenticate"
+                    );
+                }
+                else
+                {
+                    const newNum = inputPasswords + 1;
+                    auth.AddPasswordData(points);
+                    setInputPasswords(newNum);
+
+                    if (newNum === numPasswords)
+                    {
+                        setMessage(auth.CreatePassword()
+                            ? "Password Set! The Test May Begin!"
+                            : "Failed to set Password... Please Refresh."
+                        );
+
+                        return setLoading(false);
+                    }
+
+                    setMessage(`Input ${numPasswords - newNum} More Password to Set.`);
+                }
+
                 setLoading(false);
             }}>
                 Submit
