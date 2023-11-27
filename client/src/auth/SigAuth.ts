@@ -9,7 +9,9 @@ interface Segment
 class SigAuth
 {
     private compressionTolerance: number;
-    private authTolerance: number;
+    private distanceTolerance: number;
+    private angleTolerance: number;
+    private sizeTolerance: number;
     private matchPercent: number;
 
     private passSegments: Segment[][] = [];
@@ -17,11 +19,15 @@ class SigAuth
 
     constructor(
         compressionTolerance: number,
-        authTolerance: number,
+        distanceTolerance: number,
+        angleTolerance: number,
+        sizeTolerance: number,
         matchPercent: number
     ) {
         this.compressionTolerance = compressionTolerance;
-        this.authTolerance = authTolerance;
+        this.distanceTolerance = distanceTolerance;
+        this.angleTolerance = angleTolerance;
+        this.sizeTolerance = sizeTolerance;
         this.matchPercent = matchPercent;
     }
 
@@ -60,6 +66,8 @@ class SigAuth
 
     private InternalAuthCheck(small: Segment[], large: Segment[]): boolean
     {
+        if ((large.length - small.length) > large.length * this.sizeTolerance) { return false; }
+
         let jdx = 0, count = 0;
         for (let idx = 0; idx < small.length; idx++)
         {
@@ -71,8 +79,8 @@ class SigAuth
                 const dd = Math.abs(s1.distance - s2.distance)
 
                 if (
-                    (!ad || ad <= Math.abs(s2.angle) * this.authTolerance) &&
-                    (dd <= Math.abs(s2.distance) * this.authTolerance)
+                    (!ad || ad <= Math.abs(s2.angle) * this.angleTolerance) &&
+                    (dd <= Math.abs(s2.distance) * this.distanceTolerance)
                 )
                 {
                     count++;
