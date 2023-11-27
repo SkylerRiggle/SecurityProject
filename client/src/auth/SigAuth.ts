@@ -66,29 +66,30 @@ class SigAuth
 
     private InternalAuthCheck(small: Segment[], large: Segment[]): boolean
     {
-        if ((large.length - small.length) > large.length * this.sizeTolerance) { return false; }
+        const chunk = Math.ceil(large.length * this.sizeTolerance);
+        if ((large.length - small.length) > chunk) { return false; }
 
         let jdx = 0, count = 0;
         for (let idx = 0; idx < small.length; idx++)
         {
             const s1 = small[idx];
-            for (let kdx = jdx; kdx < large.length; kdx++)
+            for (let kdx = jdx; kdx < Math.min(large.length, jdx + chunk); kdx++)
             {
                 const s2 = large[kdx];
                 const ad = Math.abs(s1.angle - s2.angle);
-                const dd = Math.abs(s1.distance - s2.distance)
+                const dd = Math.abs(s1.distance - s2.distance);
 
                 if (
                     (!ad || ad <= Math.abs(s2.angle) * this.angleTolerance) &&
-                    (dd <= Math.abs(s2.distance) * this.distanceTolerance)
-                )
-                {
+                    (dd <= s2.distance * this.distanceTolerance)
+                ) {
                     count++;
                     jdx = kdx + 1;
                     break;
                 }
             }
         }
+
         console.log(`AUTH CHECK: ${count / small.length}`)
         return (count / small.length) >= this.matchPercent;
     }
