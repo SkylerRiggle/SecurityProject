@@ -3,9 +3,15 @@ import Button from "react-bootstrap/Button";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import SigAuth from "../auth/SigAuth";
 
+const compressionTolerance: number = 0.0872665;
+const distanceTolerance: number = 1.5;
+const angleTolerance: number = 0.4;
+const sizeTolerance: number = 0.35;
+const matchPercent: number = 0.75;
+const numPasswords: number = 3;
+
 const SignaturePage = () =>
 {
-    const numPasswords = 3;
     const [inputPasswords, setInputPasswords] = useState<number>(0);
 
     const canvas = useRef<ReactSketchCanvasRef | null>(null);
@@ -14,7 +20,13 @@ const SignaturePage = () =>
     const [message, setMessage] = useState<string>(`Input ${numPasswords} of the Same Signature`);
     const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => { setAuth(new SigAuth(0.0872665, 0.5, 0.1, 0.2, 0.75)); }, []);
+    useEffect(() => { setAuth(new SigAuth(
+        compressionTolerance, 
+        distanceTolerance, 
+        angleTolerance, 
+        sizeTolerance, 
+        matchPercent
+    )); }, []);
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
         <h3 className="mb-4">Sign Here!</h3>
