@@ -6,6 +6,21 @@ interface Segment
     distance: number;
 }
 
+interface AuthResult
+{
+    score: number;
+    isAuth: boolean;
+}
+
+export interface SigParameters
+{
+    compressionTolerance: number;
+    distanceTolerance: number;
+    angleTolerance: number;
+    sizeTolerance: number;
+    matchPercent: number;
+}
+
 class SigAuth
 {
     private compressionTolerance: number;
@@ -17,18 +32,12 @@ class SigAuth
     private passSegments: Segment[][] = [];
     private password: Segment[] = [];
 
-    constructor(
-        compressionTolerance: number,
-        distanceTolerance: number,
-        angleTolerance: number,
-        sizeTolerance: number,
-        matchPercent: number
-    ) {
-        this.compressionTolerance = compressionTolerance;
-        this.distanceTolerance = distanceTolerance;
-        this.angleTolerance = angleTolerance;
-        this.sizeTolerance = sizeTolerance;
-        this.matchPercent = matchPercent;
+    constructor(params: SigParameters) {
+        this.compressionTolerance = params.compressionTolerance;
+        this.distanceTolerance = params.distanceTolerance;
+        this.angleTolerance = params.angleTolerance;
+        this.sizeTolerance = params.sizeTolerance;
+        this.matchPercent = params.matchPercent;
     }
 
     public CreatePassword(): boolean
@@ -64,10 +73,10 @@ class SigAuth
         return true;
     }
 
-    private InternalAuthCheck(small: Segment[], large: Segment[]): boolean
+    private InternalAuthCheck(small: Segment[], large: Segment[]): AuthResult
     {
         const chunk = Math.ceil(large.length * this.sizeTolerance);
-        if ((large.length - small.length) > chunk) { return false; }
+        if ((large.length - small.length) > chunk) { return { score: 0, isAuth: false }; }
 
         let jdx = 0, count = 0;
         for (let idx = 0; idx < small.length; idx++)
@@ -90,11 +99,14 @@ class SigAuth
             }
         }
 
-        console.log(`AUTH CHECK: ${count / small.length}`)
-        return (count / small.length) >= this.matchPercent;
+        const score = (count / small.length);
+        return {
+            score: score,
+            isAuth: (count / small.length) >= this.matchPercent
+        };
     }
 
-    public CheckAuth(points: Point[]): boolean
+    public CheckAuth(points: Point[]): AuthResult
     {
         const segments = this.PointsToSegments(points);
         return (segments.length > this.password.length)

@@ -2,12 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import SigAuth from "../auth/SigAuth";
+import SweepParameters from "../auth/SwifferSweeper";
 
-const compressionTolerance: number = 0.0872665;
-const distanceTolerance: number = 1.5;
-const angleTolerance: number = 0.4;
-const sizeTolerance: number = 0.35;
-const matchPercent: number = 0.75;
 const numPasswords: number = 3;
 
 const SignaturePage = () =>
@@ -20,13 +16,13 @@ const SignaturePage = () =>
     const [message, setMessage] = useState<string>(`Input ${numPasswords} of the Same Signature`);
     const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => { setAuth(new SigAuth(
-        compressionTolerance, 
-        distanceTolerance, 
-        angleTolerance, 
-        sizeTolerance, 
-        matchPercent
-    )); }, []);
+    useEffect(() => { setAuth(new SigAuth({
+        compressionTolerance: 0.0872665, 
+        distanceTolerance: 1.5, 
+        angleTolerance: 0.4, 
+        sizeTolerance: 0.35, 
+        matchPercent: 0.75
+    })); }, []);
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
         <h3 className="mb-4">Sign Here!</h3>
@@ -66,7 +62,7 @@ const SignaturePage = () =>
 
                 if (inputPasswords >= numPasswords)
                 {
-                    setMessage(auth.CheckAuth(points)
+                    setMessage(auth.CheckAuth(points).isAuth
                         ? "Authenticated"
                         : "Failed to Authenticate"
                     );
@@ -102,6 +98,26 @@ const SignaturePage = () =>
                 Clear
             </Button>
         </div>
+
+        <Button className="mt-3" onClick={() => {
+            setLoading(true);
+            SweepParameters({
+                compressionTolerance: 0.05, 
+                distanceTolerance: 0.25, 
+                angleTolerance: 0.05, 
+                sizeTolerance: 0.05, 
+                matchPercent: 0.75
+            }, {
+                compressionTolerance: 0.1, 
+                distanceTolerance: 3, 
+                angleTolerance: 0.5, 
+                sizeTolerance: 0.45, 
+                matchPercent: 1
+            });
+            setLoading(false);
+        }}>
+            Clear
+        </Button>
     </div>);
 }
 
