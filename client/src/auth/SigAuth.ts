@@ -108,6 +108,8 @@ class SigAuth
 
     public CheckAuth(points: Point[]): AuthResult
     {
+        // console.log("AUTH");
+        // console.log(points);
         const segments = this.PointsToSegments(points);
         return (segments.length > this.password.length)
         ? this.InternalAuthCheck(this.password, segments)
@@ -166,6 +168,8 @@ class SigAuth
 
     public AddPasswordData(points: Point[])
     {
+        // console.log("PASS");
+        // console.log(points);
         this.passSegments.push(
             this.PointsToSegments(points)
         );

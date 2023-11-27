@@ -113,10 +113,10 @@ const SignaturePage = () =>
                 angleTolerance: 0.5, 
                 sizeTolerance: 0.45, 
                 matchPercent: 1
-            });
+            }, 1000);
             setLoading(false);
         }}>
-            Clear
+            Swiffer Sweeper
         </Button>
     </div>);
 }
