@@ -17,11 +17,11 @@ const SignaturePage = () =>
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => { setAuth(new SigAuth({
-        compressionTolerance: 0.0872665, 
-        distanceTolerance: 1.5, 
-        angleTolerance: 0.4, 
-        sizeTolerance: 0.35, 
-        matchPercent: 0.75
+        compressionTolerance: 0.1399, 
+        distanceTolerance: 2.2799, 
+        angleTolerance: 0.54, 
+        sizeTolerance: 0.08, 
+        matchPercent: 0.99
     })); }, []);
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
@@ -103,17 +103,17 @@ const SignaturePage = () =>
             setLoading(true);
             SweepParameters({
                 compressionTolerance: 0.05, 
-                distanceTolerance: 0.25, 
+                distanceTolerance: 1, 
                 angleTolerance: 0.05, 
                 sizeTolerance: 0.05, 
-                matchPercent: 0.75
+                matchPercent: 0.7
             }, {
-                compressionTolerance: 0.1, 
+                compressionTolerance: 0.15, 
                 distanceTolerance: 3, 
-                angleTolerance: 0.5, 
+                angleTolerance: 0.55, 
                 sizeTolerance: 0.45, 
                 matchPercent: 1
-            }, 1000);
+            }, 0.01);
             setLoading(false);
         }}>
             Swiffer Sweeper

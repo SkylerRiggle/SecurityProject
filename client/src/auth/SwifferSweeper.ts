@@ -35,21 +35,15 @@ const SweepParameters = (
 ) => {
     const results = new Map<number, SigParameters>();
 
-    const compStep = (high.compressionTolerance - low.compressionTolerance) / granularity;
-    const distStep = (high.distanceTolerance - low.distanceTolerance) / granularity;
-    const angleStep = (high.angleTolerance - low.angleTolerance) / granularity;
-    const sizeStep = (high.sizeTolerance - low.sizeTolerance) / granularity;
-    const matchStep = (high.matchPercent - low.matchPercent) / granularity;
-
-    for (let comp = low.compressionTolerance; comp < high.compressionTolerance; comp += compStep)
+    for (let comp = low.compressionTolerance; comp < high.compressionTolerance; comp += granularity)
     {
-        for (let dist = low.distanceTolerance; dist < high.distanceTolerance; dist += distStep)
+        for (let dist = low.distanceTolerance; dist < high.distanceTolerance; dist += granularity)
         {
-            for (let angle = low.angleTolerance; angle < high.angleTolerance; angle += angleStep)
+            for (let angle = low.angleTolerance; angle < high.angleTolerance; angle += granularity)
             {
-                for (let size = low.sizeTolerance; size < high.sizeTolerance; size += sizeStep)
+                for (let size = low.sizeTolerance; size < high.sizeTolerance; size += granularity)
                 {
-                    for (let match = low.matchPercent; match < high.matchPercent; match += matchStep)
+                    for (let match = low.matchPercent; match < high.matchPercent; match += granularity)
                     {
                         const params: SigParameters = {
                             compressionTolerance: comp,
@@ -65,12 +59,20 @@ const SweepParameters = (
         }
     }
 
-    let min = Infinity;
+    let max = -Infinity;
     for (const score of Array.from(results.keys()))
     {
-        min = Math.min(score, min);
+        max = Math.max(score, max);
     }
-    console.log(`BEST PARAMETERS:\n${results.get(min)}`);
+
+    const best = results.get(max);
+    console.log("BEST PARAMS:\n--------------------");
+    console.log(`SCORE: ${max}`);
+    console.log(`COMPRESSION: ${best?.compressionTolerance}`);
+    console.log(`DISTANCE: ${best?.distanceTolerance}`);
+    console.log(`ANGLE: ${best?.angleTolerance}`);
+    console.log(`SIZE: ${best?.sizeTolerance}`);
+    console.log(`MATCH: ${best?.matchPercent}`);
 }
 
 export default SweepParameters;
