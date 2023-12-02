@@ -42,17 +42,13 @@ const StandardPage = () =>
 
                 <br />
 
-                <div className="d-flex justify-content-around">
+                <div className="d-flex justify-content-center">
                     <Form.Control
                         className="btn text-white"
                         style={{width:"fit-content"}}
                         type="submit"
                         value="Login"
                     />
-
-                    <a href="/" className="btn text-white">
-                        Back
-                    </a>
                 </div>
             </Form>
         </div>
