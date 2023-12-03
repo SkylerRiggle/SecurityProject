@@ -17,7 +17,7 @@ const SignaturePage = () =>
     const [message, setMessage] = useState<string>(`Input ${numPasswords} of the Same Signature`);
     const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => { setAuth(new SigAuth(TestingParams.params[0])); }, []);
+    useEffect(() => { setAuth(new SigAuth(TestingParams.params[4])); }, []);
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
         <h3 className="mb-4">Sign Here!</h3>

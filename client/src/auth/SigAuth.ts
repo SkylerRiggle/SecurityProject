@@ -21,6 +21,8 @@ export interface SigParameters
     matchPercent: number;
 }
 
+const PADDING = 5;
+
 class SigAuth
 {
     private compressionTolerance: number;
@@ -82,7 +84,7 @@ class SigAuth
         for (let idx = 0; idx < small.length; idx++)
         {
             const s1 = small[idx];
-            for (let kdx = jdx; kdx < Math.min(large.length, jdx + chunk); kdx++)
+            for (let kdx = jdx; kdx < Math.min(large.length, jdx + PADDING); kdx++)
             {
                 const s2 = large[kdx];
                 const ad = Math.abs(s1.angle - s2.angle);

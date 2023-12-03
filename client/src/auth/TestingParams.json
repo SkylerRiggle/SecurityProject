@@ -10,9 +10,9 @@
         {
             "compressionTolerance": 0.05, 
             "distanceTolerance": 0.75, 
-            "angleTolerance": 0.15, 
-            "sizeTolerance": 0.4, 
-            "matchPercent": 0.75
+            "angleTolerance": 0.5, 
+            "sizeTolerance": 0.75, 
+            "matchPercent": 0.6
         },
         {
             "compressionTolerance": 0.05, 
@@ -30,10 +30,10 @@
         },
         {
             "compressionTolerance": 0.05, 
-            "distanceTolerance": 0.9, 
-            "angleTolerance": 0.1, 
-            "sizeTolerance": 0.35, 
-            "matchPercent": 0.75
+            "distanceTolerance": 0.7, 
+            "angleTolerance": 0.45, 
+            "sizeTolerance": 0.7, 
+            "matchPercent": 0.7
         }
     ]
 }
