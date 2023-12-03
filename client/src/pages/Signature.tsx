@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import SigAuth from "../auth/SigAuth";
-import SweepParameters from "../auth/SwifferSweeper";
+// import SweepParameters from "../auth/SwifferSweeper";
 
 const numPasswords: number = 3;
 
@@ -17,11 +17,11 @@ const SignaturePage = () =>
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => { setAuth(new SigAuth({
-        compressionTolerance: 0.1399, 
-        distanceTolerance: 2.2799, 
-        angleTolerance: 0.54, 
-        sizeTolerance: 0.08, 
-        matchPercent: 0.99
+        compressionTolerance: 0.14, 
+        distanceTolerance: 2.3, 
+        angleTolerance: 0.25, 
+        sizeTolerance: 0.35, 
+        matchPercent: 0.75
     })); }, []);
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
@@ -99,25 +99,23 @@ const SignaturePage = () =>
             </Button>
         </div>
 
-        <Button className="mt-3" onClick={() => {
-            setLoading(true);
+        {/* <Button className="mt-3" onClick={() => {
             SweepParameters({
-                compressionTolerance: 0.05, 
-                distanceTolerance: 1, 
-                angleTolerance: 0.05, 
-                sizeTolerance: 0.05, 
-                matchPercent: 0.7
+                compressionTolerance: 0,
+                distanceTolerance: 0,
+                angleTolerance: 0,
+                sizeTolerance: 0,
+                matchPercent: 0.6
             }, {
-                compressionTolerance: 0.15, 
-                distanceTolerance: 3, 
-                angleTolerance: 0.55, 
-                sizeTolerance: 0.45, 
+                compressionTolerance: 0.25,
+                distanceTolerance: 2,
+                angleTolerance: 1,
+                sizeTolerance: 1,
                 matchPercent: 1
             }, 0.01);
-            setLoading(false);
         }}>
             Swiffer Sweeper
-        </Button>
+        </Button> */}
     </div>);
 }
 

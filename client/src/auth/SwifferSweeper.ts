@@ -28,7 +28,7 @@ const Core = (params: SigParameters): number =>
     return score;
 }
 
-const SweepParameters = (
+const SweepParameters = async (
     low: SigParameters,
     high: SigParameters,
     granularity: number
@@ -43,7 +43,7 @@ const SweepParameters = (
             {
                 for (let size = low.sizeTolerance; size < high.sizeTolerance; size += granularity)
                 {
-                    for (let match = low.matchPercent; match < high.matchPercent; match += granularity)
+                    for (let match = high.matchPercent; match >= low.matchPercent; match -= granularity)
                     {
                         const params: SigParameters = {
                             compressionTolerance: comp,
