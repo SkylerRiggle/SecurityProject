@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import SigAuth from "../auth/SigAuth";
+import TestingParams from "../auth/TestingParams.json";
 // import SweepParameters from "../auth/SwifferSweeper";
 
 const numPasswords: number = 1;
@@ -16,13 +17,7 @@ const SignaturePage = () =>
     const [message, setMessage] = useState<string>(`Input ${numPasswords} of the Same Signature`);
     const [loading, setLoading] = useState<boolean>(false);
 
-    useEffect(() => { setAuth(new SigAuth({
-        compressionTolerance: 0.14, 
-        distanceTolerance: 2.3, 
-        angleTolerance: 0.25, 
-        sizeTolerance: 0.35, 
-        matchPercent: 0.75
-    })); }, []);
+    useEffect(() => { setAuth(new SigAuth(TestingParams.params[0])); }, []);
 
     return (<div className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
         <h3 className="mb-4">Sign Here!</h3>

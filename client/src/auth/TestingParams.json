@@ -1,0 +1,39 @@
+{
+    "params": [
+        {
+            "compressionTolerance": 0.05, 
+            "distanceTolerance": 0.25, 
+            "angleTolerance": 0.1, 
+            "sizeTolerance": 0.35, 
+            "matchPercent": 0.75
+        },
+        {
+            "compressionTolerance": 0.05, 
+            "distanceTolerance": 0.25, 
+            "angleTolerance": 0.1, 
+            "sizeTolerance": 0.35, 
+            "matchPercent": 0.75
+        },
+        {
+            "compressionTolerance": 0.05, 
+            "distanceTolerance": 0.25, 
+            "angleTolerance": 0.1, 
+            "sizeTolerance": 0.35, 
+            "matchPercent": 0.75
+        },
+        {
+            "compressionTolerance": 0.05, 
+            "distanceTolerance": 0.25, 
+            "angleTolerance": 0.1, 
+            "sizeTolerance": 0.35, 
+            "matchPercent": 0.75
+        },
+        {
+            "compressionTolerance": 0.05, 
+            "distanceTolerance": 0.25, 
+            "angleTolerance": 0.1, 
+            "sizeTolerance": 0.35, 
+            "matchPercent": 0.75
+        }
+    ]
+}
