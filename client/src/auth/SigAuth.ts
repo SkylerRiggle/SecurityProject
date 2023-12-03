@@ -100,6 +100,7 @@ class SigAuth
         }
 
         const score = (count / small.length);
+        console.log(`SCORE: ${score}`);
         return {
             score: score,
             isAuth: (count / small.length) >= this.matchPercent
