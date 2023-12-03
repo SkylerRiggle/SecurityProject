@@ -4,7 +4,7 @@ import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import SigAuth from "../auth/SigAuth";
 // import SweepParameters from "../auth/SwifferSweeper";
 
-const numPasswords: number = 3;
+const numPasswords: number = 1;
 
 const SignaturePage = () =>
 {
