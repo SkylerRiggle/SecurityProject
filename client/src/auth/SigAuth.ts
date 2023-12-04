@@ -142,7 +142,7 @@ class SigAuth
             idx++;
 
             // Remove chained segments with matching slope
-            const newAngle = diffX ? Math.atan(diffY / diffX) : Infinity;
+            const newAngle = diffX ? Math.atan(diffY / diffX) : Math.PI / 2;
             const angleDiff = (segments.length > 0)
             ? Math.abs(newAngle - segments[segments.length - 1].angle)
             : Infinity;
