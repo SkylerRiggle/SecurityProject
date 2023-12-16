@@ -2,9 +2,10 @@
 
 ## Running the Client Application
 
-To run the Client, cd into the client folder and run the following command:
+To run the Client, cd into the client folder and run the following commands:
 
 ```command
+npm install
 npm start
 ```
 
@@ -12,9 +13,10 @@ This should open a localhost application, but if not, a link to the application 
 
 ## Running the Server Application
 
-To run the Server, simply cd into the server folder and run the following command:
+To run the Server, simply cd into the server folder and run the following commands:
 
 ```command
+npm install
 npm start
 ```
 
